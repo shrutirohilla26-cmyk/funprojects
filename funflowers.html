@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>फूल for a fool</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
+    body {
+      margin: 0;
+      height: 100vh;
+      overflow: hidden;
+      background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 50%, #fad0c4 100%);
+      font-family: 'Pacifico', cursive;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    #background-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1;
+      font-size: 5em;
+      color: #fff;
+      text-shadow: 0 0 20px #ff69b4, 0 0 40px #ff1493, 0 0 60px #ff69b4;
+      pointer-events: none;
+      text-align: center;
+      animation: floatText 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes floatText {
+      0% { transform: translate(-50%, -50%) translateY(0); }
+      100% { transform: translate(-50%, -50%) translateY(-20px); }
+    }
+
+    .flower {
+      position: absolute;
+      z-index: 0;
+      user-select: none;
+      pointer-events: none;
+      transition: transform 0.1s linear;
+    }
+  </style>
+</head>
+<body>
+  <div id="background-text">फूल for a fool</div>
+
+  <script>
+    const flowerImages = ["1.jpg", "2.jpg"];
+    const flowers = [];
+    const numFlowers = 25;
+
+    let bodyWidth = window.innerWidth;
+    let bodyHeight = window.innerHeight;
+
+    for (let i = 0; i < numFlowers; i++) {
+      const img = document.createElement("img");
+      img.src = flowerImages[Math.floor(Math.random() * flowerImages.length)];
+      img.classList.add("flower");
+
+      img.style.width = 30 + Math.random() * 60 + "px";
+      img.style.height = img.style.width;
+
+      img.style.left = Math.random() * bodyWidth + "px";
+      img.style.top = -100 + Math.random() * bodyHeight + "px";
+
+      img.speed = 1 + Math.random() * 3;
+      img.sway = Math.random() * 2; // side sway factor
+      img.angle = Math.random() * 360;
+
+      document.body.appendChild(img);
+      flowers.push(img);
+    }
+
+    function animate() {
+      for (let i = 0; i < flowers.length; i++) {
+        const f = flowers[i];
+        let top = parseFloat(f.style.top);
+        let left = parseFloat(f.style.left);
+
+        top += f.speed;
+        left += Math.sin(top / 50) * f.sway; // sway effect
+        f.angle += 2;
+        f.style.top = top + "px";
+        f.style.left = left + "px";
+        f.style.transform = `rotate(${f.angle}deg)`;
+
+        if (top > bodyHeight) {
+          f.style.top = -100 + "px";
+          f.style.left = Math.random() * bodyWidth + "px";
+        }
+      }
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    window.addEventListener("resize", () => {
+      bodyWidth = window.innerWidth;
+      bodyHeight = window.innerHeight;
+    });
+  </script>
+</body>
+</html>
